@@ -1,0 +1,40 @@
+version: '3'
+services:
+  db:
+    container_name: "db"
+    image: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+
+  rentacar:
+    build: .
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - 8881:8881
+    environment:
+      HOST: 0.0.0.0
+      PORT: 8881
+      DB_HOST: db
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      DB_NAME: postgres
+      DB_PORT: 5432
+      SHOPIFY_STORE: juandresyn
+      SHOPIFY_KEY: 1fe52a9276e0aa4d56e188f1ef446ba1
+      SHOPIFY_PASS: 79aaee0902c704fb3e917aafc569a785
+      BOWL_PRODUCT_IMAGE: https://img.taste.com.au/UNI74eui/w720-h480-cfill-q80/taste/2017/09/easy-beef-quinoa-salad-bowl_1980x1320-130617-1.jpg
+    links:
+      - db
+    depends_on:
+      - db
+
+volumes:
+  postgres_data:
