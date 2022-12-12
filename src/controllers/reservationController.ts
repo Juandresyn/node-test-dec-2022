@@ -15,25 +15,13 @@ const reservationsRouter: Router = Router();
 reservationsRouter.post('/', async (req: Request, res: Response, next: NextFunction) => {
   logger.info(JSON.stringify(req.body));
   const reservationService = new ReservationService();
-  const carService = new CarService();
-  const userService = new UserService();
-
   try {
-    const car = await carService.getById(req.body.carId);
-    const user = await userService.getById(req.body.userId);
-    const response = await reservationService.insert(req.body);
-
-    response.car = car;
-    response.user = user;
-
-    const reservation = await reservationService.update(response);
-    // const reservation = await reservationService.getById(response.id);
-
+    const response = await reservationService.insert(req.body, req.body.carId, req.body.userId);
 
     // return 200 even if no reservation found. Empty array. Not an error
     res.status(HttpStatus.OK).json({
       success: true,
-      reservation: reservation
+      reservation: response
     });
   } catch (err) {
     const error: ApiResponseError = {

@@ -1,5 +1,7 @@
 import { getManager, Repository } from 'typeorm';
 import { Reservation } from '../entities/Reservation';
+import { CarService } from './cars.service';
+import { UserService } from './users.service';
 import { Logger, ILogger } from '../utils/logger';
 
 export class ReservationService {
@@ -22,10 +24,21 @@ export class ReservationService {
   /**
    * Inserts a new Reservation into the database.
    */
-  async insert(data: Reservation): Promise<Reservation> {
+  async insert(data: Reservation, carId: string, userId: string | number): Promise<Reservation> {
     this.logger.info('Create a new Reservation', data);
+    const carService = new CarService();
+    const userService = new UserService();
+    const car = await carService.getById(carId);
+    const user = await userService.getById(userId);
+
     const newReservation = this.reservationRepository.create(data);
-    return await this.reservationRepository.save(newReservation);
+    const reservation = await this.reservationRepository.save(newReservation);
+    reservation.car = car;
+    reservation.user = user;
+
+    await this.reservationRepository.save(newReservation);
+
+    return this.getById(reservation.id);
   }
 
   /**
@@ -66,7 +79,7 @@ export class ReservationService {
    * Deletes a reservation by given id
    */
    async delete(reservation: Reservation): Promise<Reservation> {
-    this.logger.info('Deleting reservation by id: ', reservation);
+    this.logger.info('Deleting reservation: ', reservation);
     if (reservation) {
       return await this.reservationRepository.remove(reservation);
     }

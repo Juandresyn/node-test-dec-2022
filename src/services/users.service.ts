@@ -49,7 +49,7 @@ export class UserService {
   /**
    * Returns an user by email
    */
-  async getByCedula(id: string): Promise<User | undefined> {
+  async getByCedula(id: number): Promise<User | undefined> {
     const users = await this.userRepository.find({
       where: {
         id: id
