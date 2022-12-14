@@ -30,6 +30,7 @@ It normally runs over the `:8881` port.
 ### Instructions
 - Download the repo.
 - Set the configuration parameters in the `docker-compose.yml` file.
+- run `npm install`
 - In Postman or any other client, send a `GET` request to `<host:port>/api/` to see the API welcome response.
 
 
