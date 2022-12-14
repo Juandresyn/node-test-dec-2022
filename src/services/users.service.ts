@@ -1,9 +1,9 @@
 import { getManager, Repository } from 'typeorm';
+
 import { User } from '../entities/User';
 import { Logger, ILogger } from '../utils/logger';
 
 export class UserService {
-
   userRepository: Repository<User>;
   logger: ILogger;
 
@@ -15,7 +15,7 @@ export class UserService {
   /**
    * Creates an instance of User.
    */
-  instantiate(data: Object): User | undefined {
+  instantiate(data: object): User | undefined {
     return this.userRepository.create(data);
   }
 
@@ -52,11 +52,11 @@ export class UserService {
   async getByCedula(id: number): Promise<User | undefined> {
     const users = await this.userRepository.find({
       where: {
-        id: id
-      }
+        id: id,
+      },
     });
     if (users && users.length > 0) {
-      return users[0];  // typeorm find() returns array even if response is single object
+      return users[0]; // typeorm find() returns array even if response is single object
     } else {
       return undefined;
     }
@@ -77,7 +77,7 @@ export class UserService {
   /**
    * Deletes an user
    */
-   async delete(user: User): Promise<User> {
+  async delete(user: User): Promise<User> {
     this.logger.info('Deleting user by id: ', user);
     if (user) {
       return await this.userRepository.remove(user);

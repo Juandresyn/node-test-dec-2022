@@ -1,4 +1,13 @@
-import { JoinColumn, Entity, Column, CreateDateColumn, OneToOne, UpdateDateColumn, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  JoinColumn,
+  Entity,
+  Column,
+  CreateDateColumn,
+  OneToOne,
+  UpdateDateColumn,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+
 import { Car } from './Car';
 import { User } from './User';
 
@@ -7,17 +16,13 @@ export class Reservation {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @OneToOne(
-    type => User
-  )
+  @OneToOne((type) => User)
   @JoinColumn({
     name: 'user_id',
   })
   user: User;
 
-  @OneToOne(
-    type => Car
-  )
+  @OneToOne((type) => Car)
   @JoinColumn({
     name: 'car_id',
   })

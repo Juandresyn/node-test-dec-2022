@@ -12,7 +12,7 @@ import genericErrorHandler from './middlewares/genericErrorHandler';
 import nodeErrorHandler from './middlewares/nodeErrorHandler';
 import notFoundHandler from './middlewares/notFoundHandler';
 import routes from './routes';
-import {Logger, ILogger} from './utils/logger';
+import { Logger, ILogger } from './utils/logger';
 
 export class Application {
   app: express.Application;
@@ -25,33 +25,37 @@ export class Application {
     this.app.locals.name = this.config.name;
     this.app.locals.version = this.config.version;
 
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
     this.app.use(require('express-status-monitor')());
     this.app.use(cors());
     this.app.use(helmet());
-    this.app.use(morgan('dev', {
-      skip: (() => process.env.NODE_ENV === 'test')
-    }));
+    this.app.use(
+      morgan('dev', {
+        skip: () => process.env.NODE_ENV === 'test',
+      }),
+    );
     this.app.use(bodyParser.json());
     this.app.use(bodyParser.urlencoded({ extended: true }));
 
     this.app.use('/api', routes);
     this.app.use(genericErrorHandler);
     this.app.use(notFoundHandler);
-
   }
 
   setupDbAndServer = async () => {
     const conn = await createConnection();
     this.logger.info(`Connected to database. Connection: ${conn.name} / ${conn.options.database}`);
     await this.startServer();
-  }
+  };
 
   startServer(): Promise<boolean> {
     return new Promise((resolve, reject) => {
-      this.app.listen(+this.config.port, this.config.host, () => {
-        this.logger.info(`Server started at http://${this.config.host}:${this.config.port}`);
-        resolve(true);
-      }).on('error', nodeErrorHandler);
+      this.app
+        .listen(+this.config.port, this.config.host, () => {
+          this.logger.info(`Server started at http://${this.config.host}:${this.config.port}`);
+          resolve(true);
+        })
+        .on('error', nodeErrorHandler);
     });
   }
 }

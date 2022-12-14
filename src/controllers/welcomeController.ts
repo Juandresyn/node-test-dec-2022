@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import * as HttpStatus from 'http-status-codes';
+
 import config from '../config/config';
 
 const { messages } = config;
@@ -15,7 +16,7 @@ const welcomeController = (req: Request, res: Response) => {
   return res.status(HttpStatus.OK).json({
     name: req.app.locals.name,
     message: messages.helloWorld,
-    version: req.app.locals.version
+    version: req.app.locals.version,
   });
 };
 

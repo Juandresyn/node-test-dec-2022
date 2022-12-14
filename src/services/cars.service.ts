@@ -1,9 +1,9 @@
 import { getManager, Repository } from 'typeorm';
+
 import { Car } from '../entities/Car';
 import { Logger, ILogger } from '../utils/logger';
 
 export class CarService {
-
   carRepository: Repository<Car>;
   logger: ILogger;
 
@@ -15,7 +15,7 @@ export class CarService {
   /**
    * Creates an instance of Car.
    */
-  instantiate(data: Object): Car | undefined {
+  instantiate(data: object): Car | undefined {
     return this.carRepository.create(data);
   }
 
@@ -51,10 +51,10 @@ export class CarService {
    */
   async getByLicense(id: string): Promise<Car | undefined> {
     const cars = await this.carRepository.find({
-      where: { id }
+      where: { id },
     });
     if (cars && cars.length > 0) {
-      return cars[0];  // typeorm find() returns array even if response is single object
+      return cars[0]; // typeorm find() returns array even if response is single object
     } else {
       return undefined;
     }
@@ -72,14 +72,14 @@ export class CarService {
     }
   }
 
-    /**
+  /**
    * Deletes a car
    */
-     async delete(car: Car): Promise<Car> {
-      this.logger.info('Deleting car by id: ', car);
-      if (car) {
-        return await this.carRepository.remove(car);
-      }
-      return Promise.reject(false);
+  async delete(car: Car): Promise<Car> {
+    this.logger.info('Deleting car by id: ', car);
+    if (car) {
+      return await this.carRepository.remove(car);
     }
+    return Promise.reject(false);
+  }
 }

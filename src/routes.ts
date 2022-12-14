@@ -1,9 +1,9 @@
 import { Router } from 'express';
-// import usersRouter from './controllers/usersController';
-import welcomeController from './controllers/welcomeController';
-import usersRouter from './controllers/userController';
+
 import carsRouter from './controllers/carController';
 import reservationRouter from './controllers/reservationController';
+import usersRouter from './controllers/userController';
+import welcomeController from './controllers/welcomeController';
 
 const router: Router = Router();
 

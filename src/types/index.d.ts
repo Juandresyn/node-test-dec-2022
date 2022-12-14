@@ -1,6 +1,6 @@
 import 'express';
 
-declare module Express {
+declare namespace Express {
   export interface Request {
     user?: any;
   }

@@ -1,7 +1,8 @@
-import { ReservationService } from '../../src/services/reservations.service';
-import { CarService } from '../../src/services/cars.service';
-import { UserService } from '../../src/services/users.service';
 import { createConnection } from 'typeorm';
+
+import { CarService } from '../../src/services/cars.service';
+import { ReservationService } from '../../src/services/reservations.service';
+import { UserService } from '../../src/services/users.service';
 
 let db;
 
@@ -17,15 +18,15 @@ beforeAll(async () => {
     id: 1234567890,
     name: 'Walter',
     lastname: 'White',
-    dob: '1973-06-12'
+    dob: '1973-06-12',
   };
   const carData: any = {
-    id: "NOF123",
+    id: 'NOF123',
     maker: 'mercedes-benz',
     model: 2023,
     ref: 'GLC300',
     color: 'blue',
-    milage: 31278
+    milage: 31278,
   };
 
   user = await userService.insert(userData);
@@ -62,7 +63,7 @@ test('The reservation construction should go accordingly to the parameters', asy
     carId: user.client,
     from: '2022-12-10 10:00:00',
     to: '2022-12-20 11:00:00',
-    notes: 'Lorem ipsum dolor sit amet'
+    notes: 'Lorem ipsum dolor sit amet',
   };
 
   const newReservation = await reservationService.insert(reservationData, car.carId, user.client);
@@ -81,7 +82,7 @@ test('Updating the reservation should reflect the changes', async () => {
     carId: user.client,
     from: '2022-12-10 10:00:00',
     to: '2022-12-20 11:00:00',
-    notes: 'Lorem ipsum dolor sit amet'
+    notes: 'Lorem ipsum dolor sit amet',
   };
   const newReservation = await reservationService.insert(reservationData, car.carId, user.client);
   newReservation.from = '2022-12-14 09:00:00';
@@ -99,7 +100,7 @@ test('Should return all reservations', async () => {
     carId: user.client,
     from: '2022-12-10 10:00:00',
     to: '2022-12-20 11:00:00',
-    notes: 'Lorem ipsum dolor sit amet'
+    notes: 'Lorem ipsum dolor sit amet',
   };
 
   const newReservation = await reservationService.insert(reservationData, car.carId, user.client);
@@ -118,7 +119,7 @@ test('Should return reservation by id', async () => {
     carId: user.client,
     from: '2022-12-10 10:00:00',
     to: '2022-12-20 11:00:00',
-    notes: 'Lorem ipsum dolor sit amet'
+    notes: 'Lorem ipsum dolor sit amet',
   };
 
   const newReservation = await reservationService.insert(reservationData, car.carId, user.client);
@@ -131,17 +132,16 @@ test('Should return reservation by id', async () => {
 
 test('Should delete reservation', async () => {
   const reservationService = new ReservationService();
-  let reservationId;
   const reservationData: any = {
     userId: car.carId,
     carId: user.client,
     from: '2022-12-10 10:00:00',
     to: '2022-12-20 11:00:00',
-    notes: 'Lorem ipsum dolor sit amet'
+    notes: 'Lorem ipsum dolor sit amet',
   };
 
   const newReservation = await reservationService.insert(reservationData, car.carId, user.client);
-  reservationId = newReservation.id;
+  const reservationId = newReservation.id;
 
   expect(newReservation.user.name).toBe('Walter');
 

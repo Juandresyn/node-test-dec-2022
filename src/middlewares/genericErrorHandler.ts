@@ -1,4 +1,3 @@
-import * as HttpStatus from 'http-status-codes';
 import { Request, Response, NextFunction } from 'express';
 
 import { Logger } from '../utils/logger';
@@ -26,9 +25,9 @@ export default function genericErrorHandler(err: any, req: Request, res: Respons
   if (err.errorsArray) {
     errorMsg = err.errorsArray.map((e: any) => e.param + ': ' + e.msg).toString();
   }
-  res.status((errCode)).json({
+  res.status(errCode).json({
     success: false,
     code: errCode,
-    message: errorMsg
+    message: errorMsg,
   });
 }

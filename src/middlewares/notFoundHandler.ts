@@ -1,5 +1,5 @@
-import * as HttpStatus from 'http-status-codes';
 import { Request, Response, NextFunction } from 'express';
+import * as HttpStatus from 'http-status-codes';
 
 /**
  * Error response middleware for 404 not found.
@@ -13,7 +13,7 @@ export default function notFoundError(req: Request, res: Response, next: NextFun
   res.status(HttpStatus.NOT_FOUND).json({
     error: {
       code: HttpStatus.NOT_FOUND,
-      message: HttpStatus.getStatusText(HttpStatus.NOT_FOUND)
-    }
+      message: HttpStatus.getStatusText(HttpStatus.NOT_FOUND),
+    },
   });
 }

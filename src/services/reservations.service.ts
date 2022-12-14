@@ -1,11 +1,12 @@
 import { getManager, Repository } from 'typeorm';
+
 import { Reservation } from '../entities/Reservation';
-import { CarService } from './cars.service';
-import { UserService } from './users.service';
 import { Logger, ILogger } from '../utils/logger';
 
-export class ReservationService {
+import { CarService } from './cars.service';
+import { UserService } from './users.service';
 
+export class ReservationService {
   reservationRepository: Repository<Reservation>;
   logger: ILogger;
 
@@ -17,7 +18,7 @@ export class ReservationService {
   /**
    * Creates an instance of Reservation.
    */
-  instantiate(data: Object): Reservation | undefined {
+  instantiate(data: object): Reservation | undefined {
     return this.reservationRepository.create(data);
   }
 
@@ -46,7 +47,7 @@ export class ReservationService {
    */
   async getAll(): Promise<Reservation[]> {
     return await this.reservationRepository.find({
-      relations: ['car', 'user']
+      relations: ['car', 'user'],
     });
   }
 
@@ -57,7 +58,7 @@ export class ReservationService {
     this.logger.info('Fetching reservation by id: ', id);
     if (id) {
       return await this.reservationRepository.findOne(id, {
-        relations: ['car', 'user']
+        relations: ['car', 'user'],
       });
     }
     return Promise.reject(false);
@@ -78,7 +79,7 @@ export class ReservationService {
   /**
    * Deletes a reservation by given id
    */
-   async delete(reservation: Reservation): Promise<Reservation> {
+  async delete(reservation: Reservation): Promise<Reservation> {
     this.logger.info('Deleting reservation: ', reservation);
     if (reservation) {
       return await this.reservationRepository.remove(reservation);

@@ -1,4 +1,3 @@
-export default
-{
-  helloWorld: 'Hello 99'
+export default {
+  helloWorld: 'Hello 99',
 };

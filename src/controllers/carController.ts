@@ -1,9 +1,10 @@
 import { NextFunction, Request, Response, Router } from 'express';
+import { body, validationResult } from 'express-validator/check';
 import * as HttpStatus from 'http-status-codes';
+
 import config from '../config/config';
 import { ApiResponseError } from '../resources/interfaces/ApiResponseError';
 import { CarService } from '../services/cars.service';
-import { body, validationResult } from 'express-validator/check';
 import { Logger, ILogger } from '../utils/logger';
 
 const { errors } = config;
@@ -20,12 +21,12 @@ carsRouter.post('/', async (req: Request, res: Response, next: NextFunction) => 
     // return 200 even if no car found. Empty array. Not an error
     res.status(HttpStatus.OK).json({
       success: true,
-      data: response
+      data: response,
     });
   } catch (err) {
     const error: ApiResponseError = {
       code: HttpStatus.BAD_REQUEST,
-      errorObj: err
+      errorObj: err,
     };
     next(error);
   }
@@ -34,30 +35,29 @@ carsRouter.post('/', async (req: Request, res: Response, next: NextFunction) => 
 // on routes that end in /cars
 // -----------------------------
 carsRouter.get('/', async (req: Request | any, res: Response, next: NextFunction) => {
+  const carService = new CarService();
 
-    const carService = new CarService();
-
-    try {
-      const response = await carService.getAll();
-      // return 200 even if no car found. Empty array. Not an error
-      res.status(HttpStatus.OK).json({
-        success: true,
-        data: response
-      });
-    } catch (err) {
-      const error: ApiResponseError = {
-        code: HttpStatus.BAD_REQUEST,
-        errorObj: err
-      };
-      next(error);
-    }
-  });
+  try {
+    const response = await carService.getAll();
+    // return 200 even if no car found. Empty array. Not an error
+    res.status(HttpStatus.OK).json({
+      success: true,
+      data: response,
+    });
+  } catch (err) {
+    const error: ApiResponseError = {
+      code: HttpStatus.BAD_REQUEST,
+      errorObj: err,
+    };
+    next(error);
+  }
+});
 
 // on routes that end in /cars/:id
 // --------------------------------------
-carsRouter.route('/:id')
+carsRouter
+  .route('/:id')
   .get(async (req: Request | any, res: Response, next: NextFunction) => {
-
     const carService = new CarService();
     try {
       const car = await carService.getById(req.params.id);
@@ -66,20 +66,20 @@ carsRouter.route('/:id')
       if (!car) {
         res.status(HttpStatus.NOT_FOUND).json({
           success: false,
-          message: `${errors.entityNotFound}: car id`
+          message: `${errors.entityNotFound}: car id`,
         });
         return;
       }
       // return found car
       res.status(HttpStatus.OK).json({
         success: true,
-        car: car
+        car: car,
       });
-
-    } catch (err) { // db exception. example: wrong syntax of id e.g. special character
+    } catch (err) {
+      // db exception. example: wrong syntax of id e.g. special character
       const error: ApiResponseError = {
         code: HttpStatus.BAD_REQUEST,
-        errorObj: err
+        errorObj: err,
       };
       next(error);
     }
@@ -104,7 +104,7 @@ carsRouter.route('/:id')
           if (!car) {
             return res.status(HttpStatus.NOT_FOUND).json({
               success: false,
-              message: `${errors.entityNotFound}: car id`
+              message: `${errors.entityNotFound}: car id`,
             });
           }
 
@@ -119,60 +119,61 @@ carsRouter.route('/:id')
           const updatedCar = await carService.update(car);
           return res.status(HttpStatus.OK).json({
             success: true,
-            car: updatedCar
+            car: updatedCar,
           });
         } catch (err) {
           // db errors e.g. unique constraints etc
           const error: ApiResponseError = {
             code: HttpStatus.BAD_REQUEST,
-            errorObj: err
+            errorObj: err,
           };
           next(error);
 
           return null;
         }
-      } else {  // validation errors
+      } else {
+        // validation errors
         const error: ApiResponseError = {
           code: HttpStatus.BAD_REQUEST,
-          errorsArray: validationErrors.array()
+          errorsArray: validationErrors.array(),
         };
         next(error);
 
         return null;
       }
-    })
+    },
+  )
 
-    .delete(async (req: Request | any, res: Response, next: NextFunction) => {
+  .delete(async (req: Request | any, res: Response, next: NextFunction) => {
+    const carService = new CarService();
+    try {
+      const car = await carService.getById(req.params.id);
 
-      const carService = new CarService();
-      try {
-        const car = await carService.getById(req.params.id);
-
-        // if car not found
-        if (!car) {
-          res.status(HttpStatus.NOT_FOUND).json({
-            success: false,
-            message: `${errors.entityNotFound}: car id`
-          });
-          return;
-        }
-
-        await carService.delete(car);
-
-        // return found car
-        res.status(HttpStatus.OK).json({
-          success: true,
-          car: car,
-          message: 'Car deleted successfully'
+      // if car not found
+      if (!car) {
+        res.status(HttpStatus.NOT_FOUND).json({
+          success: false,
+          message: `${errors.entityNotFound}: car id`,
         });
-
-      } catch (err) { // db exception. example: wrong syntax of id e.g. special character
-        const error: ApiResponseError = {
-          code: HttpStatus.BAD_REQUEST,
-          errorObj: err
-        };
-        next(error);
+        return;
       }
-    });
+
+      await carService.delete(car);
+
+      // return found car
+      res.status(HttpStatus.OK).json({
+        success: true,
+        car: car,
+        message: 'Car deleted successfully',
+      });
+    } catch (err) {
+      // db exception. example: wrong syntax of id e.g. special character
+      const error: ApiResponseError = {
+        code: HttpStatus.BAD_REQUEST,
+        errorObj: err,
+      };
+      next(error);
+    }
+  });
 
 export default carsRouter;

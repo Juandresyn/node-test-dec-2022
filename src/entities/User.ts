@@ -6,7 +6,7 @@ export class User {
   client: number;
 
   @Column({
-    unique: true
+    unique: true,
   })
   id: number;
 

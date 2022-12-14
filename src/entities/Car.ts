@@ -6,7 +6,7 @@ export class Car {
   carId: number;
 
   @Column({
-    unique: true
+    unique: true,
   })
   id: string;
 

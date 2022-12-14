@@ -17,17 +17,17 @@ export default {
   port: (isTestEnvironment ? process.env.TEST_APP_PORT : process.env.PORT) || '8000',
   pagination: {
     page: 1,
-    maxRows: 20
+    maxRows: 20,
   },
   db: {
-    host: (isTestEnvironment ? process.env.TEST_DB_HOST : process.env.DB_HOST),
-    port: (isTestEnvironment ? process.env.TEST_DB_PORT : process.env.DB_PORT),
-    username: (isTestEnvironment ? process.env.TEST_DB_USERNAME : process.env.DB_USERNAME),
-    password: (isTestEnvironment ? process.env.TEST_DB_PASSWORD : process.env.DB_PASSWORD),
-    database: (isTestEnvironment ? process.env.TEST_DB_NAME : process.env.DB_NAME),
+    host: isTestEnvironment ? process.env.TEST_DB_HOST : process.env.DB_HOST,
+    port: isTestEnvironment ? process.env.TEST_DB_PORT : process.env.DB_PORT,
+    username: isTestEnvironment ? process.env.TEST_DB_USERNAME : process.env.DB_USERNAME,
+    password: isTestEnvironment ? process.env.TEST_DB_PASSWORD : process.env.DB_PASSWORD,
+    database: isTestEnvironment ? process.env.TEST_DB_NAME : process.env.DB_NAME,
   },
   logging: {
     dir: process.env.LOGGING_DIR || 'logs',
-    level: process.env.LOGGING_LEVEL || 'debug'
-  }
+    level: process.env.LOGGING_LEVEL || 'debug',
+  },
 };

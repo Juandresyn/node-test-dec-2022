@@ -1,5 +1,5 @@
 import config from '../config/config';
-import {Logger} from '../utils/logger';
+import { Logger } from '../utils/logger';
 
 const { errors } = config;
 

@@ -1,11 +1,12 @@
-import { CarService } from '../../src/services/cars.service';
 import { createConnection } from 'typeorm';
+
+import { CarService } from '../../src/services/cars.service';
 
 let db;
 
 beforeAll(async () => {
   db = await createConnection();
-})
+});
 
 afterAll(async () => {
   const carService = new CarService();
@@ -16,17 +17,17 @@ afterAll(async () => {
   }
 
   await db.close();
-})
+});
 
 test('The car construction should go accordingly to the parameters', async () => {
   const carService = new CarService();
   const carData: any = {
-    id: "NOF123",
+    id: 'NOF123',
     maker: 'mercedes-benz',
     model: 2023,
     ref: 'GLC300',
     color: 'blue',
-    milage: 31278
+    milage: 31278,
   };
 
   const newCar = await carService.insert(carData);
@@ -37,12 +38,12 @@ test('The car construction should go accordingly to the parameters', async () =>
 test('Updating the car should reflect the changes', async () => {
   const carService = new CarService();
   const carData: any = {
-    id: "IFF123",
+    id: 'IFF123',
     maker: 'AUDI',
     model: 2020,
     ref: 'Q7',
     color: 'red',
-    milage: 12345
+    milage: 12345,
   };
   const newCar = await carService.insert(carData);
   newCar.id = 'UUF098';
@@ -68,12 +69,12 @@ test('Should return car by license', async () => {
 test('Should delete car', async () => {
   const carService = new CarService();
   const carData: any = {
-    id: "TTT777",
+    id: 'TTT777',
     maker: 'MAZDA',
     model: 2016,
     ref: 'RX7',
     color: 'BLACK',
-    milage: 45676
+    milage: 45676,
   };
 
   const newCar = await carService.insert(carData);

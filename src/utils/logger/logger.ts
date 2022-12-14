@@ -1,5 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
+
 import * as winston from 'winston';
 
 import app from '../../config/config';
@@ -7,7 +8,6 @@ import app from '../../config/config';
 const { level, dir: logDir } = app.logging;
 
 export class Logger {
-
   public static DEFAULT_SCOPE = 'app';
 
   private static parsePathToScope(filepath: string): string {
@@ -27,7 +27,7 @@ export class Logger {
   private transports: any[];
 
   constructor(scope?: string) {
-    this.scope = Logger.parsePathToScope((scope) ? scope : Logger.DEFAULT_SCOPE);
+    this.scope = Logger.parsePathToScope(scope ? scope : Logger.DEFAULT_SCOPE);
 
     if (!fs.existsSync(logDir)) {
       fs.mkdirSync(logDir);
@@ -40,28 +40,26 @@ export class Logger {
       new winston.transports.File({ filename: `${logDir}/${level}-${currentDate}.log`, level: level }),
     );
 
-    const myFormat = winston.format.printf(info => {
+    const myFormat = winston.format.printf((info) => {
       return `${info.timestamp} ${info.level}: ${info.message}`;
     });
     if (app.environment !== 'test') {
-      this.transports.push(new winston.transports.Console({
-        format: winston.format.combine(
-          winston.format.timestamp(),
-          winston.format.colorize({ all: true }),
-          myFormat
-        )
-      }));
+      this.transports.push(
+        new winston.transports.Console({
+          format: winston.format.combine(winston.format.timestamp(), winston.format.colorize({ all: true }), myFormat),
+        }),
+      );
     }
 
     const transports = this.transports;
     this.logger = winston.createLogger({
       format: winston.format.combine(
         winston.format.timestamp({
-          format: 'YYYY-MM-DD HH:mm:ss'
+          format: 'YYYY-MM-DD HH:mm:ss',
         }),
-        myFormat
+        myFormat,
       ),
-      transports
+      transports,
     });
   }
 
@@ -92,5 +90,4 @@ export class Logger {
   private formatScope(): string {
     return `[${this.scope}]`;
   }
-
 }

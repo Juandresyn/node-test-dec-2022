@@ -1,11 +1,12 @@
-import { UserService } from '../../src/services/users.service';
 import { createConnection } from 'typeorm';
+
+import { UserService } from '../../src/services/users.service';
 
 let db;
 
 beforeAll(async () => {
   db = await createConnection();
-})
+});
 
 afterAll(async () => {
   const userService = new UserService();
@@ -16,7 +17,7 @@ afterAll(async () => {
   }
 
   await db.close();
-})
+});
 
 test('The User construction should go accordingly to the parameters', async () => {
   const userService = new UserService();
@@ -24,7 +25,7 @@ test('The User construction should go accordingly to the parameters', async () =
     id: 1234567890,
     name: 'Walter',
     lastname: 'White',
-    dob: '1973-06-12'
+    dob: '1973-06-12',
   };
 
   const newUser = await userService.insert(userData);
@@ -38,7 +39,7 @@ test('Updating the user should reflect the changes', async () => {
     id: Math.floor(Math.random() * 1000000000),
     name: 'Walter',
     lastname: 'White',
-    dob: '1973-06-12'
+    dob: '1973-06-12',
   };
   const newUser = await userService.insert(userData);
   newUser.name = 'Skyler';
@@ -67,7 +68,7 @@ test('Should delete user', async () => {
     id: 1231231231,
     name: 'Delete',
     lastname: 'ThisUser',
-    dob: '1993-07-13'
+    dob: '1993-07-13',
   };
 
   const newUser = await userService.insert(userData);
