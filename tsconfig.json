@@ -15,6 +15,7 @@
     "typeRoots": ["./src/types", "./node_modules/@types"],
     "baseUrl": "src/",
     "noImplicitReturns": true,
+    "skipLibCheck": true,
     "noFallthroughCasesInSwitch": true
   },
   "include": ["./src/**/*.tsx", "./src/**/*.ts"],
